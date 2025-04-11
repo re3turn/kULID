@@ -24,6 +24,7 @@
 
 package com.github.guepardoapps.kulid
 
+import kotlin.experimental.and
 import kotlin.random.Random
 
 class ULID {
@@ -222,27 +223,27 @@ class ULID {
             val bytes = ByteArray(DEFAULT_ENTROPY_SIZE)
 
             bytes[0] = (charToByteMapping[ulid[10].code].toInt() shl 3
-                    or (charToByteMapping[ulid[11].code].toInt().ushr(2))).toByte()
+                    or (charToByteMapping[ulid[11].code] and 0xff.toByte()).toInt().ushr(2)).toByte()
             bytes[1] = (charToByteMapping[ulid[11].code].toInt() shl 6
                     or (charToByteMapping[ulid[12].code].toInt() shl 1)
-                    or (charToByteMapping[ulid[13].code].toInt().ushr(4))).toByte()
+                    or (charToByteMapping[ulid[13].code] and 0xff.toByte()).toInt().ushr(4)).toByte()
             bytes[2] = (charToByteMapping[ulid[13].code].toInt() shl 4
-                    or (charToByteMapping[ulid[14].code].toInt().ushr(1))).toByte()
+                    or (charToByteMapping[ulid[14].code] and 0xff.toByte()).toInt().ushr(1)).toByte()
             bytes[3] = (charToByteMapping[ulid[14].code].toInt() shl 7
                     or (charToByteMapping[ulid[15].code].toInt() shl 2)
-                    or (charToByteMapping[ulid[16].code].toInt().ushr(3))).toByte()
+                    or (charToByteMapping[ulid[16].code] and 0xff.toByte()).toInt().ushr(3)).toByte()
             bytes[4] = (charToByteMapping[ulid[16].code].toInt() shl 5
                     or (charToByteMapping[ulid[17].code].toInt())).toByte()
             bytes[5] = (charToByteMapping[ulid[18].code].toInt() shl 3
-                    or (charToByteMapping[ulid[19].code].toInt().ushr(2))).toByte()
+                    or (charToByteMapping[ulid[19].code] and 0xff.toByte()).toInt().ushr(2)).toByte()
             bytes[6] = (charToByteMapping[ulid[19].code].toInt() shl 6
                     or (charToByteMapping[ulid[20].code].toInt() shl 1)
-                    or (charToByteMapping[ulid[21].code].toInt().ushr(4))).toByte()
+                    or (charToByteMapping[ulid[21].code] and 0xff.toByte()).toInt().ushr(4)).toByte()
             bytes[7] = (charToByteMapping[ulid[21].code].toInt() shl 4
-                    or (charToByteMapping[ulid[22].code].toInt().ushr(1))).toByte()
+                    or (charToByteMapping[ulid[22].code] and 0xff.toByte()).toInt().ushr(1)).toByte()
             bytes[8] = (charToByteMapping[ulid[22].code].toInt() shl 7
                     or (charToByteMapping[ulid[23].code].toInt() shl 2)
-                    or (charToByteMapping[ulid[24].code].toInt().ushr(3))).toByte()
+                    or (charToByteMapping[ulid[24].code] and 0xff.toByte()).toInt().ushr(3)).toByte()
             bytes[9] = (charToByteMapping[ulid[24].code].toInt() shl 5
                     or (charToByteMapping[ulid[25].code].toInt())).toByte()
 
