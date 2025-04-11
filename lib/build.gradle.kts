@@ -7,7 +7,13 @@ plugins {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.20")
-    testImplementation("junit:junit:4.13.2")
+
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.12.1")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 kotlin {
