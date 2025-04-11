@@ -190,4 +190,56 @@ class ULIDUnitTests {
             }
         }
     }
+
+    @Test
+    fun testUlidWithZEntropy() {
+        val testUlid = "01EA9F3000ZZZZZZZZZZZZZZZZ"
+
+        // Extract timestamp and entropy from the ULID
+        val timestamp = ULID.getTimestamp(testUlid)
+        val entropy = ULID.getEntropy(testUlid)
+
+        // Regenerate ULID using the extracted timestamp and entropy
+        val regeneratedUlid = ULID.generate(timestamp, entropy)
+
+        // Verify that the regenerated ULID matches the original
+        assertEquals(testUlid, regeneratedUlid, "Regenerated ULID should match the original")
+    }
+
+    @Test
+    fun testFromStringInvalid() {
+        val invalidUlids = arrayOf(
+            "",
+            "0",
+            "000000000000000000000000000",
+            "-0000000000000000000000000",
+            "0000000000000000000000000U",
+            "0000000000000000000000000/u3042",
+            "0000000000000000000000000#")
+
+        for (ulid in invalidUlids) {
+            assertThrows(IllegalArgumentException::class.java, { ULID.fromString(ulid) },
+                "IllegalArgumentException should be thrown for invalid ULID \"$ulid\"")
+        }
+    }
+
+    @Test
+    fun testGenerateInvalidInputs() {
+        // Test timestamp less than TIMESTAMP_MIN
+        assertThrows(IllegalArgumentException::class.java, { ULID.generate(ULID.TIMESTAMP_MIN - 1, zeroEntropy) },
+            "IllegalArgumentException should be thrown for timestamp < TIMESTAMP_MIN")
+
+        // Test timestamp greater than TIMESTAMP_MAX
+        assertThrows(IllegalArgumentException::class.java, { ULID.generate(ULID.TIMESTAMP_MAX + 1, zeroEntropy) },
+            "IllegalArgumentException should be thrown for timestamp > TIMESTAMP_MAX")
+
+        // Test null entropy
+        assertThrows(IllegalArgumentException::class.java, { ULID.generate(ULID.TIMESTAMP_MIN, null) },
+            "IllegalArgumentException should be thrown for null entropy")
+
+        // Test entropy with less than 10 bytes
+        val shortEntropy = byteArrayOf(0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0)
+        assertThrows(IllegalArgumentException::class.java, { ULID.generate(ULID.TIMESTAMP_MIN, shortEntropy) },
+            "IllegalArgumentException should be thrown for entropy with less than 10 bytes")
+    }
 }

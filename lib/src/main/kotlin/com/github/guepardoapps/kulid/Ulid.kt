@@ -24,7 +24,6 @@
 
 package com.github.guepardoapps.kulid
 
-import kotlin.experimental.and
 import kotlin.random.Random
 
 class ULID {
@@ -151,21 +150,21 @@ class ULID {
             chars[9] = charMapping[time.toInt() and 0x1f]
 
             // entropy
-            chars[10] = charMapping[(entropy[0].toShort() and 0xff).toInt().ushr(3)]
-            chars[11] = charMapping[(entropy[0].toInt() shl 2 or (entropy[1].toShort() and 0xff).toInt().ushr(6) and 0x1f)]
-            chars[12] = charMapping[((entropy[1].toShort() and 0xff).toInt().ushr(1) and 0x1f)]
-            chars[13] = charMapping[(entropy[1].toInt() shl 4 or (entropy[2].toShort() and 0xff).toInt().ushr(4) and 0x1f)]
-            chars[14] = charMapping[(entropy[2].toInt() shl 5 or (entropy[3].toShort() and 0xff).toInt().ushr(7) and 0x1f)]
-            chars[15] = charMapping[((entropy[3].toShort() and 0xff).toInt().ushr(2) and 0x1f)]
-            chars[16] = charMapping[(entropy[3].toInt() shl 3 or (entropy[4].toShort() and 0xff).toInt().ushr(5) and 0x1f)]
+            chars[10] = charMapping[(entropy[0].toInt() and 0xff ushr 3)]
+            chars[11] = charMapping[(entropy[0].toInt() shl 2 or (entropy[1].toInt() and 0xff ushr 6) and 0x1f)]
+            chars[12] = charMapping[(entropy[1].toInt() and 0xff ushr 1 and 0x1f)]
+            chars[13] = charMapping[(entropy[1].toInt() shl 4 or (entropy[2].toInt() and 0xff ushr 4) and 0x1f)]
+            chars[14] = charMapping[(entropy[2].toInt() shl 1 or (entropy[3].toInt() and 0xff ushr 7) and 0x1f)]
+            chars[15] = charMapping[(entropy[3].toInt() and 0xff ushr 2 and 0x1f)]
+            chars[16] = charMapping[(entropy[3].toInt() shl 3 or (entropy[4].toInt() and 0xff ushr 5) and 0x1f)]
             chars[17] = charMapping[(entropy[4].toInt() and 0x1f)]
-            chars[18] = charMapping[(entropy[5].toShort() and 0xff).toInt().ushr(3)]
-            chars[19] = charMapping[(entropy[5].toInt() shl 2 or (entropy[6].toShort() and 0xff).toInt().ushr(6) and 0x1f)]
-            chars[20] = charMapping[((entropy[6].toShort() and 0xff).toInt().ushr(1) and 0x1f)]
-            chars[21] = charMapping[(entropy[6].toInt() shl 4 or (entropy[7].toShort() and 0xff).toInt().ushr(4) and 0x1f)]
-            chars[22] = charMapping[(entropy[7].toInt() shl 5 or (entropy[8].toShort() and 0xff).toInt().ushr(7) and 0x1f)]
-            chars[23] = charMapping[((entropy[8].toShort() and 0xff).toInt().ushr(2) and 0x1f)]
-            chars[24] = charMapping[(entropy[8].toInt() shl 3 or (entropy[9].toShort() and 0xff).toInt().ushr(5) and 0x1f)]
+            chars[18] = charMapping[(entropy[5].toInt() and 0xff ushr 3)]
+            chars[19] = charMapping[(entropy[5].toInt() shl 2 or (entropy[6].toInt() and 0xff ushr 6) and 0x1f)]
+            chars[20] = charMapping[(entropy[6].toInt() and 0xff ushr 1 and 0x1f)]
+            chars[21] = charMapping[(entropy[6].toInt() shl 4 or (entropy[7].toInt() and 0xff ushr 4) and 0x1f)]
+            chars[22] = charMapping[(entropy[7].toInt() shl 1 or (entropy[8].toInt() and 0xff ushr 7) and 0x1f)]
+            chars[23] = charMapping[(entropy[8].toInt() and 0xff ushr 2 and 0x1f)]
+            chars[24] = charMapping[(entropy[8].toInt() shl 3 or (entropy[9].toInt() and 0xff ushr 5) and 0x1f)]
             chars[25] = charMapping[(entropy[9].toInt() and 0x1f)]
 
             return String(chars)
@@ -223,27 +222,27 @@ class ULID {
             val bytes = ByteArray(DEFAULT_ENTROPY_SIZE)
 
             bytes[0] = (charToByteMapping[ulid[10].code].toInt() shl 3
-                    or (charToByteMapping[ulid[11].code] and 0xff.toByte()).toInt().ushr(2)).toByte()
+                    or (charToByteMapping[ulid[11].code].toInt().ushr(2))).toByte()
             bytes[1] = (charToByteMapping[ulid[11].code].toInt() shl 6
                     or (charToByteMapping[ulid[12].code].toInt() shl 1)
-                    or (charToByteMapping[ulid[13].code] and 0xff.toByte()).toInt().ushr(4)).toByte()
+                    or (charToByteMapping[ulid[13].code].toInt().ushr(4))).toByte()
             bytes[2] = (charToByteMapping[ulid[13].code].toInt() shl 4
-                    or (charToByteMapping[ulid[14].code] and 0xff.toByte()).toInt().ushr(1)).toByte()
+                    or (charToByteMapping[ulid[14].code].toInt().ushr(1))).toByte()
             bytes[3] = (charToByteMapping[ulid[14].code].toInt() shl 7
                     or (charToByteMapping[ulid[15].code].toInt() shl 2)
-                    or (charToByteMapping[ulid[16].code] and 0xff.toByte()).toInt().ushr(3)).toByte()
+                    or (charToByteMapping[ulid[16].code].toInt().ushr(3))).toByte()
             bytes[4] = (charToByteMapping[ulid[16].code].toInt() shl 5
                     or (charToByteMapping[ulid[17].code].toInt())).toByte()
             bytes[5] = (charToByteMapping[ulid[18].code].toInt() shl 3
-                    or (charToByteMapping[ulid[19].code] and 0xff.toByte()).toInt().ushr(2)).toByte()
+                    or (charToByteMapping[ulid[19].code].toInt().ushr(2))).toByte()
             bytes[6] = (charToByteMapping[ulid[19].code].toInt() shl 6
                     or (charToByteMapping[ulid[20].code].toInt() shl 1)
-                    or (charToByteMapping[ulid[21].code] and 0xff.toByte()).toInt().ushr(4)).toByte()
+                    or (charToByteMapping[ulid[21].code].toInt().ushr(4))).toByte()
             bytes[7] = (charToByteMapping[ulid[21].code].toInt() shl 4
-                    or (charToByteMapping[ulid[22].code] and 0xff.toByte()).toInt().ushr(1)).toByte()
+                    or (charToByteMapping[ulid[22].code].toInt().ushr(1))).toByte()
             bytes[8] = (charToByteMapping[ulid[22].code].toInt() shl 7
                     or (charToByteMapping[ulid[23].code].toInt() shl 2)
-                    or (charToByteMapping[ulid[24].code] and 0xff.toByte()).toInt().ushr(3)).toByte()
+                    or (charToByteMapping[ulid[24].code].toInt().ushr(3))).toByte()
             bytes[9] = (charToByteMapping[ulid[24].code].toInt() shl 5
                     or (charToByteMapping[ulid[25].code].toInt())).toByte()
 
