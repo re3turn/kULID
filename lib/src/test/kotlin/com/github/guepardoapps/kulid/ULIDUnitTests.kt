@@ -242,4 +242,28 @@ class ULIDUnitTests {
         assertThrows(IllegalArgumentException::class.java, { ULID.generate(ULID.TIMESTAMP_MIN, shortEntropy) },
             "IllegalArgumentException should be thrown for entropy with less than 10 bytes")
     }
+
+    @Test
+    fun testMonotonicSorting() {
+        // Generate ULIDs with increasing timestamps
+        val timestamp1 = 1000L
+        val timestamp2 = 1001L
+        val timestamp3 = 1002L
+
+        val entropy = byteArrayOf(0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0)
+
+        val ulid1 = ULID.generate(timestamp1, entropy)
+        val ulid2 = ULID.generate(timestamp2, entropy)
+        val ulid3 = ULID.generate(timestamp3, entropy)
+
+        // Verify that ULIDs are lexicographically sortable
+        assertTrue(ulid1 < ulid2, "ULID with earlier timestamp should be lexicographically less than ULID with later timestamp")
+        assertTrue(ulid2 < ulid3, "ULID with earlier timestamp should be lexicographically less than ULID with later timestamp")
+
+        // Verify that sorting ULIDs is equivalent to sorting by timestamp
+        val ulids = listOf(ulid3, ulid1, ulid2)
+        val sortedUlids = ulids.sorted()
+
+        assertEquals(listOf(ulid1, ulid2, ulid3), sortedUlids, "ULIDs should sort in timestamp order")
+    }
 }
